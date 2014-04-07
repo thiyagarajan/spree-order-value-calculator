@@ -1,13 +1,5 @@
 class Spree::Calculator::Shipping::OrderValue < Spree::ShippingCalculator
-  preference :weight_table,    :string,  default: '1 2 5 10 20'
-  preference :price_table,     :string,  default: '6 9 12 15 18'
-  preference :max_item_weight, :decimal, default: 18
-  preference :max_item_width,  :decimal, default: 60
-  preference :max_item_length, :decimal, default: 120
-  preference :max_price,       :decimal, default: 120
-  preference :handling_max,    :decimal, default: 50
-  preference :handling_fee,    :decimal, default: 10
-  preference :default_weight,  :decimal, default: 1
+  preference :price_table, :text, default: '1:5 2:7 5:10 10:15 100:50'
 
   def self.description
     Spree.t(:ship_by_value)
@@ -19,13 +11,13 @@ class Spree::Calculator::Shipping::OrderValue < Spree::ShippingCalculator
 
   def item_oversized?(variant)
     sizes = [
-      variant.width  ? variant.width  : 0,
-      variant.depth  ? variant.depth  : 0,
-      variant.height ? variant.height : 0
+        variant.width ? variant.width : 0,
+        variant.depth ? variant.depth : 0,
+        variant.height ? variant.height : 0
     ].sort.reverse
 
     return true if sizes[0] > self.preferred_max_item_length # longest side
-    return true if sizes[1] > self.preferred_max_item_width  # second longest side
+    return true if sizes[1] > self.preferred_max_item_width # second longest side
     return false
   end
 
@@ -47,14 +39,14 @@ class Spree::Calculator::Shipping::OrderValue < Spree::ShippingCalculator
 
     order.line_items.each do |item| # determine total price and weight
       total_weight += item.quantity * (item.variant.weight || self.preferred_default_weight)
-      total_price  += item.price * item.quantity
+      total_price += item.price * item.quantity
     end
 
     return 0.0 if total_price > self.preferred_max_price
 
     # determine handling fee
     handling_fee = self.preferred_handling_max < total_price ? 0 : self.preferred_handling_fee
-    weights      = self.preferred_weight_table.split.map { |weight| weight.to_f }
+    weights = self.preferred_weight_table.split.map { |weight| weight.to_f }
 
     while total_weight > weights.last # in several packages if need be
       total_weight -= weights.last

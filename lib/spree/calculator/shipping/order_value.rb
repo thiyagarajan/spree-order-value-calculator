@@ -9,27 +9,6 @@ class Spree::Calculator::Shipping::OrderValue < Spree::ShippingCalculator
     super
   end
 
-  def item_oversized?(variant)
-    sizes = [
-        variant.width ? variant.width : 0,
-        variant.depth ? variant.depth : 0,
-        variant.height ? variant.height : 0
-    ].sort.reverse
-
-    return true if sizes[0] > self.preferred_max_item_length # longest side
-    return true if sizes[1] > self.preferred_max_item_width # second longest side
-    return false
-  end
-
-  def available?(package)
-    variants = package.contents.map(&:variant)
-    variants.each do |variant| # determine if weight or size goes over bounds
-      return false if variant.weight && variant.weight > self.preferred_max_item_weight # 18
-      return false if item_oversized? variant
-    end
-    return true
-  end
-
   # as order_or_line_items we always get line items, as calculable we have Coupon, ShippingMethod or ShippingRate
   def compute(package)
     order = package.order

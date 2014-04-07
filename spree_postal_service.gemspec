@@ -5,20 +5,20 @@ $:.unshift lib unless $:.include?(lib)
 require 'spree_order_value_calculator/version'
 
 Gem::Specification.new do |s|
-  s.platform     = Gem::Platform::RUBY
-  s.name         = 'spree_order_value_calculator'
-  s.version      = SpreePostalService.version
-  s.summary      = 'Calculate cost based charges for a Spree order'
-  s.description  = s.summary
+  s.platform = Gem::Platform::RUBY
+  s.name = 'spree_order_value_calculator'
+  s.version = SpreeOrderValue.version
+  s.summary = 'Calculate cost based charges for a Spree order'
+  s.description = s.summary
   s.required_ruby_version = '>= 1.9.3'
 
-  s.authors      = ['Torsten Rüger', 'Tobias Bohwalli']
-  s.email        = 'hi@futhr.io'
-  s.homepage     = 'https://github.com/thiyagarajan/spree-order-value-calculator'
-  s.license      = %q{BSD-3}
+  s.authors = ['Torsten Rüger', 'Tobias Bohwalli']
+  s.email = 'hi@futhr.io'
+  s.homepage = 'https://github.com/thiyagarajan/spree-order-value-calculator'
+  s.license = %q{BSD-3}
 
-  s.files        = `git ls-files`.split("\n")
-  s.test_files   = `git ls-files -- spec/*`.split("\n")
+  s.files = `git ls-files`.split("\n")
+  s.test_files = `git ls-files -- spec/*`.split("\n")
   s.require_path = 'lib'
   s.requirements << 'none'
 

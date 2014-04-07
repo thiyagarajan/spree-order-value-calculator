@@ -1,4 +1,4 @@
 ---
 en:
   spree:
-    price_table: Prices (space seperated)
+    price_table: Prices (line seperated)

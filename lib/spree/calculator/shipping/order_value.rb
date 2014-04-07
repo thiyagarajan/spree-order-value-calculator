@@ -1,5 +1,5 @@
 class Spree::Calculator::Shipping::OrderValue < Spree::ShippingCalculator
-  preference :price_table, :text, default: '1:5 2:7 5:10 10:15 100:50'
+  preference :price_table, :text, default: "1:5\n2:7\n5:10\n10:15\n100:50"
 
   def self.description
     Spree.t(:ship_by_value)

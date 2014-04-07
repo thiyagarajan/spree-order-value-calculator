@@ -9,36 +9,28 @@ class Spree::Calculator::Shipping::OrderValue < Spree::ShippingCalculator
     super
   end
 
-  # as order_or_line_items we always get line items, as calculable we have Coupon, ShippingMethod or ShippingRate
   def compute(package)
     order = package.order
 
-    total_price, total_weight, shipping = 0, 0, 0
-    prices = self.preferred_price_table.split.map { |price| price.to_f }
+    total_price, shipping = 0
 
-    order.line_items.each do |item| # determine total price and weight
-      total_weight += item.quantity * (item.variant.weight || self.preferred_default_weight)
+    order.line_items.each do |item|
       total_price += item.price * item.quantity
     end
 
-    return 0.0 if total_price > self.preferred_max_price
-
-    # determine handling fee
-    handling_fee = self.preferred_handling_max < total_price ? 0 : self.preferred_handling_fee
-    weights = self.preferred_weight_table.split.map { |weight| weight.to_f }
-
-    while total_weight > weights.last # in several packages if need be
-      total_weight -= weights.last
-      shipping += prices.last
+    def costs_string_to_hash
+      costs_string = self.preferred_price_table
+      costs = {}
+      costs_string.split.each do |cost_string|
+        values = cost_string.strip.split(':')
+        costs[values[0].strip.to_f] = values[1].strip.to_f
+      end
+      costs
     end
 
-    index = weights.length - 2
-    while index >= 0
-      break if total_weight > weights[index]
-      index -= 1
-    end
 
-    shipping += prices[index + 1]
-    return shipping + handling_fee
+    shipping = total_price
+
+    return shipping
   end
 end

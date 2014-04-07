@@ -1,0 +1,16 @@
+\#*
+*~
+.#*
+.DS_Store
+.idea
+.project
+tmp
+nbproject
+*.swp
+Gemfile.lock
+.rvmrc
+.localeapp
+coverage
+spec/dummy
+pkg/
+*.gem
